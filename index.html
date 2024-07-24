@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Front-End Example</title>
+</head>
+<body>
+  <h1>Front-End to Back-End Example</h1>
+  <input type="text" id="adIdInput" placeholder="Enter Ad-ID">
+  <button id="sendAdIdBtn">Send Ad-ID to Backend</button>
+  <div id="responseContainer"></div>
+  <div id="logContainer"></div>
+
+  <script>
+    document.getElementById('sendAdIdBtn').addEventListener('click', async () => {
+      const adId = document.getElementById('adIdInput').value;
+      
+      try {
+        const response = await fetch('http://localhost:3000/api/ad', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ adId })
+        });
+        
+        const responseData = await response.json();
+        document.getElementById('responseContainer').innerText = responseData.message || responseData.error;
+        if (responseData.logs) {
+          document.getElementById('logContainer').innerText = responseData.logs.join('\n');
+        }
+      } catch (error) {
+        console.error('Error sending Ad-ID:', error);
+      }
+    });
+  </script>
+</body>
+</html>
